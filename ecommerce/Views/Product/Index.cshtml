@@ -1,0 +1,30 @@
+﻿@using ecommerce.Models.Product
+@model IEnumerable<Product>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Produtos";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ( Product products in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => products.Name)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
