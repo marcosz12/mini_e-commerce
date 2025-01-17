@@ -1,4 +1,5 @@
 using ecommerce.Data;
+using ecommerce.Service;
 using Microsoft.EntityFrameworkCore;
 
 namespace ecommerce
@@ -26,6 +27,8 @@ namespace ecommerce
                         )
                 );
             });
+
+            builder.Services.AddScoped<ProductService>();
 
             var app = builder.Build();
 
