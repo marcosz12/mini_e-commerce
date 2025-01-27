@@ -1,7 +1,8 @@
 ﻿using ecommerce.Data;
-using ecommerce.Models.Product;
+using ecommerce.Models;
 using ecommerce.Service.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace ecommerce.Service
 {
@@ -43,6 +44,24 @@ namespace ecommerce.Service
             return await _context
                 .Products
                 .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task UpdateAsync(Product products)
+        {
+            bool hasAny = await _context.Products.AnyAsync(x => x.Id == products.Id);
+            if (!hasAny)
+            {
+                throw new NotFoundException("Id não encontrado");
+            }
+            try
+            {
+                _context.Update(products);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                throw new DbConcurrencyException(ex.Message);
+            }
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using ecommerce.Models;
-using ecommerce.Models.Product;
 using ecommerce.Service;
 using ecommerce.Service.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -79,6 +78,46 @@ namespace ecommerce.Controllers
                 RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
             };
             return View(viewModel);
+        }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id is null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id não fornecido" });
+            }
+            var obj = await _service.FindByIdAsync(id.Value);
+            if (obj is null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id não encontrado" });
+            }
+            return View(obj);
+        }
+
+        // POST Genres/Edit/x
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Product products)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            if (id != products.Id)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id's não condizentes" });
+            }
+
+            try
+            {
+                await _service.UpdateAsync(products);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (ApplicationException ex)
+            {
+                return RedirectToAction(nameof(Error), new { message = ex.Message });
+            }
         }
     }
 }
