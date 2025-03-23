@@ -1,20 +1,23 @@
-﻿namespace ecommerce.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ecommerce.Models
 {
     public class CartItem
     {
         public int Id { get; set; }
+        [Required]
         public int ProductId { get; set; }
+        [ForeignKey("ProductId")]
         public Product Product { get; set; }
         public int Quantity { get; set; }
-        public decimal TotalPrice => Product.Price * Quantity;
+        public decimal TotalPrice => (Product?.Price ?? 0)* Quantity;
 
         public CartItem() { }
 
-        public CartItem(int id, int productId, Product product, int quantity)
+        public CartItem(int productId, int quantity)
         {
-            Id = id;
             ProductId = productId;
-            Product = product;
             Quantity = quantity;
         }
     }

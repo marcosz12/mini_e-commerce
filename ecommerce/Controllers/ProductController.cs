@@ -19,7 +19,7 @@ namespace ecommerce.Controllers
         public async Task<IActionResult> Index()
         {
             List<Product> products = await _service.FindAllAsync();
-            return View(    );
+            return View(products);
         }
 
         public IActionResult Create()
@@ -55,7 +55,7 @@ namespace ecommerce.Controllers
             return View(obj);
         }
 
-        [HttpDelete]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
@@ -94,14 +94,13 @@ namespace ecommerce.Controllers
             return View(obj);
         }
 
-        // POST Genres/Edit/x
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Product products)
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return View(products);
             }
 
             if (id != products.Id)
@@ -118,6 +117,17 @@ namespace ecommerce.Controllers
             {
                 return RedirectToAction(nameof(Error), new { message = ex.Message });
             }
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var product = await _service.FindByIdAsync(id);
+
+            if (product == null)
+            {
+                return RedirectToAction(nameof(Error));
+            }
+            return View(product);
         }
     }
 }

@@ -3,24 +3,26 @@
     ViewData["Title"] = "Apagar Produto";
 }
 
-<h1 class="text-primary-emphasis">@ViewData["Title"]</h1>
+<h1 class="text-primary">@ViewData["Title"]</h1>
 
 <h4 class="lead text-secondary-emphasis mb-4">Tem certeza que deseja apagar este Produto?</h4>
 <div>
-    <h4 class="text-primary-emphasis">Produto</h4>
+    <h4 class="text-primary">Produto</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2 text-primary-emphasis">
+        <dt class="col-sm-2 fw-bold text-danger">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class="col-sm-10 text-primary-emphasis">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
     </dl>
 
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Apagar" class="btn btn-outline-danger" /> |
-        <a asp-action="Index" class="text-primary">Voltar para a lista</a>
+        <div class="mt-3">
+            <button type="submit" class="btn btn-danger" arial-label ="Confirmar exclusão do produto">Apagar</button>
+            <a asp-action="Index" class="btn btn-secondary" arial-label ="Voltar para a lista de produtos">Voltar para a lista</a>
+        </div>
     </form>
 </div>

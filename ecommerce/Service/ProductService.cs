@@ -13,7 +13,6 @@ namespace ecommerce.Service
         {
             _context = context;
         }
-
         public async Task<List<Product>> FindAllAsync()
         {
             return await _context.Products.ToListAsync();
@@ -29,7 +28,11 @@ namespace ecommerce.Service
         {
             try
             {
-                var obj = await _context.Products.FindAsync();
+                var obj = await _context.Products.FindAsync(id);
+                if (obj == null)
+                {
+                    throw new NotFoundException("Produto não encontrado.");
+                }
                 _context.Products.Remove(obj);
                 await _context.SaveChangesAsync();
             }
@@ -41,9 +44,12 @@ namespace ecommerce.Service
 
         public async Task<Product> FindByIdAsync(int id)
         {
-            return await _context
-                .Products
-                .FirstOrDefaultAsync(x => x.Id == id);
+            var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
+            if (product == null)
+            {
+                throw new NotFoundException("Produto não encontrado.");
+            }
+            return product;
         }
 
         public async Task UpdateAsync(Product products)
